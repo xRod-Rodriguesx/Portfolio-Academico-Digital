@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="/css/style.css">
+
+<nav>
+  <div class="logo">
+     <a href="/">
+    <img src="/img/Rod_Corbalan_Developer_White.png" alt="Rod Rodrigues" height="40">
+    </a>
+  </div>
+  
+  <ul class="nav-principal">
+    <li><a href="/" class="<%= (typeof activePage !== 'undefined' && activePage === 'apresentacao') ? 'active' : '' %>">Apresentação</a></li>
+    <li><a href="/formacao" class="<%= (typeof activePage !== 'undefined' && activePage === 'formacao') ? 'active' : '' %>">Formação</a></li>
+    <li><a href="/projetos" class="<%= (typeof activePage !== 'undefined' && activePage === 'projetos') ? 'active' : '' %>">Projetos</a></li>
+    <li><a href="/competencias" class="<%= (typeof activePage !== 'undefined' && activePage === 'competencias') ? 'active' : '' %>">Competências</a></li>
+    <li><a href="/sobre-mim" class="<%= (typeof activePage !== 'undefined' && activePage === 'contato') ? 'active' : '' %>">Sobre Mim</a></li>
+  </ul>
+
+  <div class="nav-admin-wrapper">
+    <a href="/admin/projetos" class="nav-admin">Admin Area</a>
+    <a href="/admin/logout" class="nav-logout" title="Logout"> <img src="/img/logout-icon.png" alt="Logout Icon"> 
+</a>
+  </div>
+</nav>

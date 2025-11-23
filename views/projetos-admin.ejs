@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Gerenciar Projetos</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %> 
+
+  <div class="container"> 
+
+    <a href="/admin">Voltar para a área do ADMIN</a>
+    <hr>
+    <h1>Gerenciador de Projetos</h1>
+
+    <div class="admin-form-card">
+      <h2>Cadastrar Novo Projeto</h2>
+      <form method="POST" action="/admin/add-project">
+        <div>
+          <label>Nome do Projeto:</label>
+          <input type="text" name="nome" required>
+        </div>
+        <div>
+          <label>Descrição:</label>
+          <input type="text" name="descricao" required>
+        </div>
+        <div>
+          <label>Tecnologias (separadas por vírgula):</label>
+          <input type="text" name="tecnologias" required>
+        </div>
+        <div>
+          <label>Link (opcional):</label>
+          <input type="text" name="link">
+        </div>
+        <button type="submit">Salvar Projeto</button>
+      </form>
+    </div> <hr style="margin: 40px 0;"> <h2>Projetos Cadastrados</h2>
+
+    <div class="formacao-grid"> 
+
+      <% if (listaDeProjetos.length > 0) { %>
+        <% for (let projeto of listaDeProjetos) { %>
+
+          <div class="formacao-card projeto-admin-card"> <h3><%= projeto.nome %></h3>
+            <p class="instituicao"> <strong>Tecnologias:</strong> <%= projeto.tecnologias %>
+            </p>
+            <p class="data"> <%= projeto.descricao %>
+            </p>
+            <% if (projeto.link) { %>
+              <a href="<%= projeto.link %>" target="_blank" class="projeto-link">Ver Projeto</a>
+            <% } %>
+
+            <div class="admin-card-actions">
+              <a href="/admin/edit/<%= projeto.id %>" class="admin-button edit">Editar</a>
+              <button onclick="deletar(<%= projeto.id %>)" class="admin-button delete">Deletar</button>
+            </div>
+
+          </div> <% } %>
+      <% } else { %>
+        <p>Nenhum projeto cadastrado ainda.</p>
+      <% } %>
+
+    </div> </div> <script>
+    function deletar(idDoProjeto) {
+      if (!confirm('Tem certeza que deseja deletar este projeto?')) { return; }
+      const url = `/projetos/delete/${idDoProjeto}`;
+      fetch(url, { method: 'DELETE' })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) { window.location.reload(); } 
+          else { alert('Erro ao deletar.'); }
+        })
+        .catch(error => { console.error('Erro:', error); alert('Erro ao deletar.'); });
+    }
+  </script>
+
+  <%- include('partials/footer') %> 
+</body>
+</html>

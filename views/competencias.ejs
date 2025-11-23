@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Competências</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('partials/header') %>
+
+  <div class="container">
+    <h1>Competências</h1>
+
+    <div class="competencias-container">
+      
+      <div class="competencias-titulos">
+        <div class="competencias-coluna">
+          <h2>Técnicas - Hard Skills</h2>
+        </div>
+        <div class="competencias-coluna">
+          <h2>Interpessoais - Soft Skills</h2>
+        </div>
+        <div class="competencias-coluna">
+          <h2>Idiomas</h2>
+        </div>
+      </div>
+
+      <div class="competencias-conteudo">
+        
+        <div class="competencias-coluna hard-skills">
+          <h3>Linguagens & Frontend</h3>
+          <ul>
+            <li>JavaScript</li>
+            <li>TypeScript</li>
+            <li>Python</li>
+            <li>HTML</li>
+            <li>CSS</li>
+          </ul>          
+          <h3>Backend & Banco de Dados</h3>
+          <ul>
+            <li>Node.js</li>
+            <li>Express.js</li>
+            <li>EJS</li>
+            <li>SQL</li> 
+          </ul>
+          <h3>Ferramentas & Metodologias</h3>
+          <ul>
+            <li>Metodologia Lean Six Sigma</li>
+            <li>Git / GitHub</li>
+            <li>Metodologia PDCA</li>
+            <li>VS Code</li>
+            <li>Jira</li>
+            <li>Metodologia Ágil / Scrum</li>
+            <li>Linux (NDG)</li>
+            <li>Microsoft Office</li>
+            <li>AutoCAD</li>
+          </ul>
+        </div>
+
+        <div class="competencias-coluna soft-skills">
+          <h3>Sociais</h3>
+          <ul>
+            <li>Empatia</li>
+            <li>Proatividade</li> 
+            <li>Inteligência Emocional</li> 
+            <li>Comunicação</li>
+            <li>Adaptabilidade</li>
+          </ul>
+          <h3>Técnicas</h3>
+          <ul>
+            <li>Liderança</li>
+            <li>Gestão de Pessoas</li>
+            <li>Gestão de Projetos</li>
+            <li>Trabalho em Equipe</li>
+            <li>Resolução de Problemas</li>
+            <li>Melhoria Contínua</li>
+          </ul>
+        </div>
+
+        <div class="competencias-coluna idiomas-coluna">
+          <h3>Gerais</h3>
+          <ul>
+            <li> <span class="idioma-nome">Inglês</span> <span class="idioma-nivel">Fluente</span> </li>
+            <li> <span class="idioma-nome">Português</span> <span class="idioma-nivel">Nativo</span> </li>
+          </ul>
+        </div>
+      </div> 
+    </div> 
+  </div>
+<%- include('partials/footer') %>
+</body>
+</html>

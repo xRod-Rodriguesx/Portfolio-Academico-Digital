@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Editar Projeto</title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  <h1>Editar Projeto</h1>
+
+  <% if (projeto) { %>
+    <form id="editForm">
+      <div>
+        <label>Nome do Projeto:</label>
+        <input type="text" name="nome" value="<%= projeto.nome %>" required>
+      </div>
+      <div>
+        <label>Descrição:</label>
+        <input type="text" name="descricao" value="<%= projeto.descricao %>" required>
+      </div>
+      <div>
+        <label>Tecnologias (separadas por vírgula):</label>
+        <input type="text" name="tecnologias" value="<%= projeto.tecnologias %>" required>
+      </div>
+      <div>
+        <label>Link (opcional):</label>
+        <input type="text" name="link" value="<%= projeto.link %>">
+      </div>
+      <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <script>
+      // Pega o formulário pelo ID
+      const form = document.getElementById('editForm');
+
+      // Adiciona um "ouvinte" para o evento de "submit"
+      form.addEventListener('submit', (event) => {
+        // 1. Impede o formulário de enviar do jeito normal (POST/GET)
+        event.preventDefault(); 
+
+        // 2. Monta a URL correta com o ID do projeto
+        const url = `/admin/update/<%= projeto.id %>`;
+
+        // 3. Pega os dados que estão nos campos do formulário
+        const formData = new FormData(form);
+        const dadosDoFormulario = Object.fromEntries(formData.entries());
+
+        // 4. Envia os dados usando fetch com o método 'PUT'
+        fetch(url, {
+          method: 'PUT',
+          headers: {
+            // Avisa o servidor que estamos enviando dados em JSON
+            'Content-Type': 'application/json',
+          },
+          // Converte o objeto de dados em texto JSON
+          body: JSON.stringify(dadosDoFormulario), 
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // 5. Se deu certo, manda o usuário de volta para a lista
+            window.location.href = 'admin/projetos';
+          } else {
+            alert('Erro ao atualizar o projeto.');
+          }
+        })
+        .catch(error => console.error('Erro:', error));
+      });
+    </script>
+
+  <% } else { %>
+    <h2>Projeto não encontrado.</h2>
+  <% } %>
+
+</body>
+</html>

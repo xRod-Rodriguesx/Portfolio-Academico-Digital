@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Projetos</title>
+</head>
+<body>
+  <%- include('partials/header') %>
+  
+  <div class="container">
+    <h1>Meus Projetos</h1>
+
+    <div class="formacao-grid"> 
+      
+      <% if (listaDeProjetos.length > 0) { %>
+        <% for (let projeto of listaDeProjetos) { %>
+          
+          <div class="formacao-card"> 
+            
+            <h3><%= projeto.nome %></h3>
+            
+            <p class="instituicao"> <strong>Tecnologias:</strong> <%= projeto.tecnologias %>
+            </p>
+            
+            <p class="data"> <%= projeto.descricao %>
+            </p>
+            
+            <% if (projeto.link) { %>
+              <a href="<%= projeto.link %>" target="_blank" class="projeto-link">Ver Projeto Online</a>
+            <% } %>
+            
+          </div>
+        <% } %>
+      <% } else { %>
+        <p>Nenhum projeto cadastrado ainda.</p>
+      <% } %>
+    </div> </div> <%- include('partials/footer') %>
+  </body>
+</html>

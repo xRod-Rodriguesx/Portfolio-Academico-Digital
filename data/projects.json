@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "nome": "Meu Primeiro Portfólio",
+    "descricao": "Um portfólio incrível feito do zero!",
+    "tecnologias": "Node.js, EJS, TypeScript",
+    "link": "http://localhost:3000"
+  },
+  {
+    "id": 2,
+    "nome": "Projeto Metodologia Scrum",
+    "descricao": "Criação de um site de treinamento para funcionários sobre metologias ágeis.",
+    "tecnologias": "HTML, CSS, JavaScript, Jira, Git, Github, Figma",
+    "link": "https://github.com/Omega-Tech-API/API"
+  },
+  {
+    "id": 3,
+    "nome": "IDE Sul",
+    "descricao": "Uma IDE ",
+    "tecnologias": "javascript",
+    "link": "https://github.com/Equipe-SUL/IDE-SUL"
+  }
+]
