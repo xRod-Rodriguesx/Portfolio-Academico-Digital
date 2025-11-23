@@ -1,0 +1,32 @@
+<%- include('partials/header') %>
+
+<main class="container" style="text-align: center; padding: 50px 0;">
+    <h1>Painel Administrativo</h1>
+    <p>Bem-vindo, Administrador! O que você deseja gerenciar hoje?</p>
+    
+    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 40px; flex-wrap: wrap;">
+        
+        <a href="/admin/projetos" style="text-decoration: none; color: inherit;">
+            <div style="border: 1px solid #ccc; padding: 30px; border-radius: 10px; width: 250px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;">
+                <h2 style="color: #007bff;">🚀 Projetos</h2>
+                <p>Adicionar, editar ou remover projetos do portfólio.</p>
+                <button style="background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">Acessar</button>
+            </div>
+        </a>
+
+        <a href="/admin/formacoes" style="text-decoration: none; color: inherit;">
+            <div style="border: 1px solid #ccc; padding: 30px; border-radius: 10px; width: 250px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;">
+                <h2 style="color: #28a745;">🎓 Formações</h2>
+                <p>Gerenciar histórico acadêmico e cursos.</p>
+                <button style="background-color: #28a745; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-top: 10px;">Acessar</button>
+            </div>
+        </a>
+
+    </div>
+
+    <div style="margin-top: 50px;">
+        <a href="/admin/logout" style="color: #d9534f; text-decoration: none; font-weight: bold;">🔴 Sair do Sistema</a>
+    </div>
+</main>
+
+<%- include('partials/footer') %>

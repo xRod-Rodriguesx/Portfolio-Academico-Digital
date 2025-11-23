@@ -1,79 +1,112 @@
 import { Request, Response } from 'express';
-import { Project, Projetos, deletarProjetoPorId, editarProjeto, getProjetoPorId, adicionarProjeto } from '../models/Project';
+// Imports de Projeto (MySQL)
+import { getAllProjects, getProjetoPorId } from '../models/Project';
+// Imports de Formação (MySQL)
+import { getAllFormacoes, getFormacaoPorId } from '../models/Formacao';
 
-// Lógica da Página Inicial
+// --- PÁGINAS PÚBLICAS ---
+
 export const homePage = (req: Request, res: Response) => {
-  const mensagemDoServidor = "Esta é uma mensagem vinda direto do servidor!!!!";
-
-  // Corrigido: 'activePage' foi movido para dentro do objeto
+  const mensagemDoServidor = "Bem-vindo ao Portfólio Conectado!";
   res.render('index', { 
     mensagem: mensagemDoServidor,
     activePage: 'apresentacao' 
   });
 };
 
-// Lógica da Página de Formação
-export const formacaoPage = (req: Request, res: Response) => {
-  // Corrigido: Removida a segunda chamada do res.render()
-  res.render('formacao', { activePage: 'formacao' });
+// Página de Formação
+export const formacaoPage = async (req: Request, res: Response) => {
+  try {
+    const formacoes = await getAllFormacoes();
+    res.render('formacao', { activePage: 'formacao', listaFormacoes: formacoes });
+  } catch (error) {
+    console.error(error);
+    res.render('formacao', { activePage: 'formacao', listaFormacoes: [] });
+  }
 };
 
-// Lógica da Página de Projetos
-export const projetosPage = (req: Request, res: Response) => {
-  // 1. Pega a lista de projetos do "banco"
-  const lista = Projetos;
-
-  // 2. Envia a lista para a página EJS
-  // Corrigido: 'activePage' foi movido para dentro do objeto
-  res.render('projetos', {
-    listaDeProjetos: lista,
-    activePage: 'projetos'
-  });
+// Página de Projetos (AGORA COM MYSQL)
+export const projetosPage = async (req: Request, res: Response) => {
+  try {
+    // Busca do banco
+    const lista = await getAllProjects();
+    res.render('projetos', {
+      listaDeProjetos: lista,
+      activePage: 'projetos'
+    });
+  } catch (error) {
+    console.error('Erro ao buscar projetos:', error);
+    res.render('projetos', { listaDeProjetos: [], activePage: 'projetos' });
+  }
 };
 
-// Lógica da Página de Competências
 export const competenciasPage = (req: Request, res: Response) => {
   res.render('competencias', { activePage: 'competencias' });
 };
 
-// Lógica da Página Sobre Mim
 export const sobreMimPage = (req: Request, res: Response) => {
-  res.render('sobre-mim', { activePage: 'sobre-mim' }); // Nome do EJS e ID para o highlight
+  res.render('sobre-mim', { activePage: 'sobre-mim' });
 };
 
-
-// --- PÁGINAS DE ADMIN ---
-
-// Lógica da Página de Admin-projetos
-export const adminProjetosPage = (req: Request, res: Response) => {
-  const lista = Projetos;
-  res.render('projetos-admin', {
-    listaDeProjetos: lista
-  });
-};
+// --- PÁGINAS DE ADMIN E LOGIN ---
 
 export const loginPage = (req: Request, res: Response) => {
-    // Passamos 'erro: null' para evitar erro no EJS na primeira vez
     res.render('login', { erro: null }); 
-  };
-
-// Lógica da Página de Admin
-export const adminPage = (req: Request, res: Response) => {
-  res.render('admin');
 };
 
-// Lógica da Página de EDIÇÃO (GET)
-export const editPage = (req: Request, res: Response) => {
-  // 1. Pega o ID da URL
+// Admin: Listar Projetos
+export const adminProjetosPage = async (req: Request, res: Response) => {
+  try {
+    const lista = await getAllProjects();
+    res.render('projetos-admin', {
+      listaDeProjetos: lista
+    });
+  } catch (error) {
+    res.send('Erro ao carregar painel de projetos');
+  }
+};
+
+// Admin: Listar Formações
+export const adminFormacoesPage = async (req: Request, res: Response) => {
+  try {
+    const formacoes = await getAllFormacoes();
+    res.render('formacoes-admin', {
+      listaFormacoes: formacoes
+    });
+  } catch (error) {
+    res.send('Erro ao carregar painel de formações');
+  }
+};
+
+// Admin: Editar Projeto
+export const editPage = async (req: Request, res: Response) => {
   const id = parseInt(req.params.id || '0');
-  // 2. Busca o projeto no "banco"
-  const projeto = getProjetoPorId(id);
+  try {
+    const projeto = await getProjetoPorId(id);
+    if(!projeto) return res.redirect('/admin/projetos');
+    
+    res.render('edit-project', { projeto: projeto });
+  } catch (error) {
+    res.redirect('/admin/projetos');
+  }
+};
 
-  // 3. Renderiza a página de edição, passando o projeto
-  // Corrigido: Renderiza 'edit-project' e envia 'projeto'
-  res.render('edit-project', { 
-    projeto: projeto
-  });
+// Admin: Dashboard
+export const adminDashboard = (req: Request, res: Response) => {
+    res.render('admin-dashboard');
+};
 
+// Admin: Editar Formação
+export const editFormacaoPage = async (req: Request, res: Response) => {
+  const id = parseInt(req.params.id || '0');
+  try {
+    const formacao = await getFormacaoPorId(id);
+    if (!formacao) return res.redirect('/admin/formacoes');
+    
+    res.render('edit-formacao', { formacao: formacao });
+  } catch (error) {
+    console.error(error);
+    res.redirect('/admin/formacoes');
+  }
 };
 

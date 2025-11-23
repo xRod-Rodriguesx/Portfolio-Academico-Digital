@@ -1,0 +1,83 @@
+<%- include('partials/header') %>
+
+<main class="container">
+    <h1>Editar Formação</h1>
+    
+    <form id="form-edit-formacao" style="display: flex; flex-direction: column; gap: 15px; max-width: 600px;">
+        <input type="hidden" id="formacaoId" value="<%= formacao.id %>">
+
+        <label>
+            Instituição:
+            <input type="text" id="instituicao" name="instituicao" value="<%= formacao.instituicao %>" required style="width: 100%; padding: 8px;">
+        </label>
+
+        <label>
+            Curso:
+            <input type="text" id="curso" name="curso" value="<%= formacao.curso %>" required style="width: 100%; padding: 8px;">
+        </label>
+
+        <div style="display: flex; gap: 20px;">
+            <label style="flex: 1;">
+                Data Início:
+                <input type="date" id="data_inicio" name="data_inicio" 
+                       value="<%= formacao.data_inicio ? new Date(formacao.data_inicio).toISOString().split('T')[0] : '' %>" required style="width: 100%; padding: 8px;">
+            </label>
+            <label style="flex: 1;">
+                Data Fim:
+                <input type="date" id="data_fim" name="data_fim" 
+                       value="<%= formacao.data_fim ? new Date(formacao.data_fim).toISOString().split('T')[0] : '' %>" style="width: 100%; padding: 8px;">
+            </label>
+        </div>
+
+        <label>
+            Descrição:
+            <textarea id="descricao" name="descricao" rows="5" style="width: 100%; padding: 8px;"><%= formacao.descricao %></textarea>
+        </label>
+
+        <div style="margin-top: 20px;">
+            <button type="submit" style="padding: 10px 20px; background-color: #007bff; color: white; border: none; cursor: pointer;">Salvar Alterações</button>
+            <a href="/admin/formacoes" style="margin-left: 10px; text-decoration: none; color: #333;">Cancelar</a>
+        </div>
+    </form>
+</main>
+
+<script>
+    const form = document.getElementById('form-edit-formacao');
+    
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Não recarrega a página padrão
+
+        const id = document.getElementById('formacaoId').value;
+        
+        // Coleta os dados
+        const dadosAtualizados = {
+            instituicao: document.getElementById('instituicao').value,
+            curso: document.getElementById('curso').value,
+            data_inicio: document.getElementById('data_inicio').value,
+            data_fim: document.getElementById('data_fim').value,
+            descricao: document.getElementById('descricao').value
+        };
+
+        // Envia via PUT
+        fetch('/admin/formacoes/update/' + id, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dadosAtualizados)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Formação atualizada com sucesso!');
+                window.location.href = '/admin/formacoes';
+            } else {
+                alert('Erro ao atualizar.');
+                console.error(data.error);
+            }
+        })
+        .catch(error => console.error('Erro:', error));
+    });
+</script>
+
+<%- include('partials/footer') %>

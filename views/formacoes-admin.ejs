@@ -1,0 +1,97 @@
+<%- include('partials/header') %>
+
+<main class="container">
+    <h1>Gerenciar Formação Acadêmica</h1>
+
+    <section>
+        <h2>Formações Cadastradas</h2>
+        <br>
+        <% if (listaFormacoes && listaFormacoes.length > 0) { %>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #333;">
+                        <th>Instituição</th>
+                        <th>Curso</th>
+                        <th>Período (Mês/Ano)</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% listaFormacoes.forEach(formacao => { %>
+                        <tr style="border-bottom: 1px solid #ccc;">
+                            <td style="padding: 10px;"><%= formacao.instituicao %></td>
+                            <td><%= formacao.curso %></td>
+                            <td>
+                                <%= new Date(formacao.data_inicio).toLocaleDateString('pt-BR', { timeZone: 'UTC', month: '2-digit', year: 'numeric' }) %> - 
+                                <%= formacao.data_fim ? new Date(formacao.data_fim).toLocaleDateString('pt-BR', { timeZone: 'UTC', month: '2-digit', year: 'numeric' }) : 'Atual' %>
+                            </td>
+                            <td>
+                                <a href="/admin/formacoes/edit/<%= formacao.id %>" class="btn-edit">Editar</a>
+                                <button onclick="deletarFormacao(<%= formacao.id %>)" class="btn-delete" style="background-color: #d9534f; color: white; border: none; padding: 5px 10px; cursor: pointer;">Excluir</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>Nenhuma formação cadastrada ainda.</p>
+        <% } %>
+    </section>
+
+    <hr style="margin: 40px 0;">
+
+    <section>
+        <h2>Adicionar Nova Formação</h2>
+        <form action="/admin/add-formacao" method="POST" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+            
+            <label>
+                Instituição:
+                <input type="text" name="instituicao" required style="width: 100%; padding: 8px;">
+            </label>
+
+            <label>
+                Curso:
+                <input type="text" name="curso" required style="width: 100%; padding: 8px;">
+            </label>
+
+            <div style="display: flex; gap: 20px;">
+                <label style="flex: 1;">
+                    Data Início:
+                    <input type="date" name="data_inicio" required style="width: 100%; padding: 8px;">
+                </label>
+                <label style="flex: 1;">
+                    Data Fim (opcional):
+                    <input type="date" name="data_fim" style="width: 100%; padding: 8px;">
+                </label>
+            </div>
+
+            <label>
+                Descrição / Detalhes:
+                <textarea name="descricao" rows="4" style="width: 100%; padding: 8px;"></textarea>
+            </label>
+
+            <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer; font-weight: bold;">Salvar Formação</button>
+        </form>
+    </section>
+</main>
+
+<script>
+    function deletarFormacao(id) {
+        if(confirm("Tem certeza que deseja excluir esta formação?")) {
+            fetch('/admin/formacoes/delete/' + id, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert("Erro ao excluir.");
+                }
+            })
+            .catch(err => console.error(err));
+        }
+    }
+</script>
+
+<%- include('partials/footer') %>

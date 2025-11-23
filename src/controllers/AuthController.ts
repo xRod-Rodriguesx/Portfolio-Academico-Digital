@@ -18,7 +18,7 @@ export const handleLogin = (req: Request, res: Response) => {
     req.session.isAdmin = true; 
 
     // 4. Redireciona para a página de gerenciamento de projetos
-    res.redirect('/admin/projetos');
+    res.redirect('/admin/dashboard');
   } else {
     // 5. Login INCORRETO! Renderiza a página de login novamente,
     //    passando uma mensagem de erro para o EJS.

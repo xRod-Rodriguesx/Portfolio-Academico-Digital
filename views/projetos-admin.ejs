@@ -1,80 +1,90 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-  <meta charset="UTF-8">
-  <title>Gerenciar Projetos</title>
-  <link rel="stylesheet" href="/css/style.css">
-</head>
-<body>
-  <%- include('partials/header') %> 
+<%- include('partials/header') %>
 
-  <div class="container"> 
+<main class="container">
+    <h1>Gerenciar Projetos</h1>
 
-    <a href="/admin">Voltar para a área do ADMIN</a>
-    <hr>
-    <h1>Gerenciador de Projetos</h1>
+    <section>
+        <h2>Projetos Cadastrados</h2>
+        <br>
+        <% if (listaDeProjetos && listaDeProjetos.length > 0) { %>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid #333;">
+                        <th>Nome</th>
+                        <th>Tecnologias</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% listaDeProjetos.forEach(projeto => { %>
+                        <tr style="border-bottom: 1px solid #ccc;">
+                            <td style="padding: 10px;"><%= projeto.nome %></td>
+                            <td><%= projeto.tecnologias %></td>
+                            <td>
+                                <a href="/admin/edit/<%= projeto.id %>" class="btn-edit">Editar</a>
+                                <button onclick="deletarProjeto(<%= projeto.id %>)" class="btn-delete" style="background-color: #d9534f; color: white; border: none; padding: 5px 10px; cursor: pointer;">Excluir</button>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>Nenhum projeto cadastrado.</p>
+        <% } %>
+    </section>
 
-    <div class="admin-form-card">
-      <h2>Cadastrar Novo Projeto</h2>
-      <form method="POST" action="/admin/add-project">
-        <div>
-          <label>Nome do Projeto:</label>
-          <input type="text" name="nome" required>
-        </div>
-        <div>
-          <label>Descrição:</label>
-          <input type="text" name="descricao" required>
-        </div>
-        <div>
-          <label>Tecnologias (separadas por vírgula):</label>
-          <input type="text" name="tecnologias" required>
-        </div>
-        <div>
-          <label>Link (opcional):</label>
-          <input type="text" name="link">
-        </div>
-        <button type="submit">Salvar Projeto</button>
-      </form>
-    </div> <hr style="margin: 40px 0;"> <h2>Projetos Cadastrados</h2>
+    <hr style="margin: 40px 0;">
 
-    <div class="formacao-grid"> 
+    <section>
+        <h2>Adicionar Novo Projeto</h2>
+        <form action="/admin/add-project" method="POST" style="display: flex; flex-direction: column; gap: 15px; max-width: 500px;">
+            <label>
+                Nome do Projeto:
+                <input type="text" name="nome" required style="width: 100%; padding: 8px;">
+            </label>
 
-      <% if (listaDeProjetos.length > 0) { %>
-        <% for (let projeto of listaDeProjetos) { %>
+            <label>
+                Descrição:
+                <textarea name="descricao" required rows="4" style="width: 100%; padding: 8px;"></textarea>
+            </label>
 
-          <div class="formacao-card projeto-admin-card"> <h3><%= projeto.nome %></h3>
-            <p class="instituicao"> <strong>Tecnologias:</strong> <%= projeto.tecnologias %>
-            </p>
-            <p class="data"> <%= projeto.descricao %>
-            </p>
-            <% if (projeto.link) { %>
-              <a href="<%= projeto.link %>" target="_blank" class="projeto-link">Ver Projeto</a>
-            <% } %>
+            <label>
+                Tecnologias (ex: Node.js, MySQL):
+                <input type="text" name="tecnologias" required style="width: 100%; padding: 8px;">
+            </label>
 
-            <div class="admin-card-actions">
-              <a href="/admin/edit/<%= projeto.id %>" class="admin-button edit">Editar</a>
-              <button onclick="deletar(<%= projeto.id %>)" class="admin-button delete">Deletar</button>
-            </div>
+            <label>
+                Link (GitHub/Deploy):
+                <input type="text" name="link" style="width: 100%; padding: 8px;">
+            </label>
 
-          </div> <% } %>
-      <% } else { %>
-        <p>Nenhum projeto cadastrado ainda.</p>
-      <% } %>
+            <button type="submit" style="padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer;">Salvar Projeto</button>
+        </form>
+    </section>
+</main>
 
-    </div> </div> <script>
-    function deletar(idDoProjeto) {
-      if (!confirm('Tem certeza que deseja deletar este projeto?')) { return; }
-      const url = `/projetos/delete/${idDoProjeto}`;
-      fetch(url, { method: 'DELETE' })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) { window.location.reload(); } 
-          else { alert('Erro ao deletar.'); }
-        })
-        .catch(error => { console.error('Erro:', error); alert('Erro ao deletar.'); });
+<script>
+    function deletarProjeto(id) {
+        if(confirm("Tem certeza que deseja excluir este projeto?")) {
+            // O caminho aqui deve bater EXATAMENTE com a rota no index.ts
+            fetch('/admin/projetos/delete/' + id, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    window.location.reload();
+                } else {
+                    alert("Erro ao excluir: " + (data.error || "Erro desconhecido"));
+                    console.error(data.error);
+                }
+            })
+            .catch(err => {
+                alert("Erro de conexão com o servidor.");
+                console.error(err);
+            });
+        }
     }
-  </script>
+</script>
 
-  <%- include('partials/footer') %> 
-</body>
-</html>
+<%- include('partials/footer') %>

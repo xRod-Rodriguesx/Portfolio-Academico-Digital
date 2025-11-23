@@ -3,6 +3,7 @@ import express from 'express';
 import mainRoutes from './routes/index';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
+import connection from './database/connection';
 
 
 // Cria o nosso aplicativo (o servidor em si) e a porta
@@ -37,6 +38,17 @@ app.use(mainRoutes);
 app.use((req, res) => {
   res.status(404).send('Página não encontrada!');
 });
+
+// Teste de Conexão com o Banco de Dados
+connection.getConnection()
+    .then((conn) => {
+        console.log('✅ Conexão com o MySQL estabelecida com sucesso!');
+        conn.release(); // Libera a conexão de volta para o pool
+    })
+    .catch((err) => {
+        console.error('❌ Falha ao conectar no MySQL:', err.message);
+        console.error('Verifique se o XAMPP/MySQL está rodando e se as credenciais no arquivo connection.ts estão corretas.');
+    });
 
 // Turn Server On
 app.listen(PORTA, () => {
